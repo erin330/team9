@@ -244,6 +244,21 @@ public final class DrawManager {
 	}
 
 	/**
+	 * Draws current time on screen.
+	 *
+	 * @param screen
+	 *            Screen to draw on.
+	 * @param time
+	 *            Current time.
+	 */
+	public void drawTime(final Screen screen, final int time) {
+		backBufferGraphics.setFont(fontRegular);
+		backBufferGraphics.setColor(Color.WHITE);
+		String scoreString = String.format("%04d", time);
+		backBufferGraphics.drawString(scoreString, screen.getWidth()/2, 25);
+	}
+
+	/**
 	 * Draws number of remaining lives on screen.
 	 * 
 	 * @param screen
