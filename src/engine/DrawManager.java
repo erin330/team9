@@ -309,23 +309,19 @@ public final class DrawManager {
 			drawEntity(dummyShip, 180 + 35 * i, 10);
 	}
 
-	public void drawMagazines(final Screen screen, final int magazine) {
+	/**
+	 * Draws the current ammunition "bullets / magazine" on screen.
+	 * @param screen
+	 * @param magazine
+	 * @param bullet_count
+	 * @param isPlayer1 true if player1, false if player2
+	 */
+	public void drawAmmu(final Screen screen, final int magazine, final int bullet_count, boolean isPlayer1){
 		backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("MAG " + Integer.toString(magazine), 10, 508);
-	}
-	public void drawMagazines2(final Screen screen, final int magazine2) {
-		backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("MAG " + Integer.toString(magazine2), 335, 508);
-	}
-
-	public void drawBullets(final Screen screen, final int bullet_count) {
-		backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("BUL " + Integer.toString(10-bullet_count), 60, 508);
-	}
-
-	public void drawBullets2(final Screen screen, final int bullet_count2) {
-		backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("BUL " + Integer.toString(10-bullet_count2), 385, 508);
+		backBufferGraphics.drawString(Integer.toString(10-bullet_count) + " / " + Integer.toString(magazine) , screen.getWidth()-120, 508);
+		if(!isPlayer1){
+			backBufferGraphics.drawString(Integer.toString(10-bullet_count) + " / " + Integer.toString(magazine) , screen.getWidth()-60, 508);
+		}
 	}
 
 	/**
