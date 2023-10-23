@@ -284,6 +284,7 @@ public class GameScreen extends Screen {
 		drawManager.drawScore(this, this.score);
 		drawManager.drawLives(this, this.lives);
 		drawManager.drawHighScore(this, this.highScore);
+		drawManager.killcounter(this, this.shipsDestroyed);
 		drawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1);
 
 		// Countdown to game start.

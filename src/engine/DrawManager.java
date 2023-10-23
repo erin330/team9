@@ -261,6 +261,23 @@ public final class DrawManager {
 		backBufferGraphics.drawString(scoreString, 2*screen.getWidth()/3, 25);
 	}
 
+
+	/**
+	 * Draws current score on screen.
+	 *
+	 * @param screen
+	 *            Screen to draw on.
+	 * @param shipsDestroyed
+	 *            Count of ships destroyed.
+	 */
+	public void killcounter(final Screen screen,final int shipsDestroyed){
+		backBufferGraphics.setFont(fontRegular);
+		backBufferGraphics.setColor(Color.RED);
+		String scoreString = String.format("%02d",shipsDestroyed);
+		backBufferGraphics.drawString(scoreString, screen.getWidth()/2, 25);
+
+	}
+
 	/**
 	 * Draws number of remaining lives on screen.
 	 * 
