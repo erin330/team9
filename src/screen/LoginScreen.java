@@ -112,7 +112,7 @@ public class LoginScreen extends Screen {
 					}
 
 					// Proceed to main menu.
-					this.returnCode = 1;
+					this.returnCode = 8;
 					this.isRunning = false;
 			}
 		}

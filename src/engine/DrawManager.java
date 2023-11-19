@@ -854,8 +854,7 @@ public final class DrawManager {
 	 * @param screen
 	 *            Screen to draw on.
 	 */
-	public void
-	drawSkinSelectionMenu(final Screen screen, final int skincode1p,final int skincode2p){
+	public void drawSkinSelectionMenu(final Screen screen, final int skincode1p,final int skincode2p){
 		String SkinString = "Select Your Ship Design!";
 		String skin1p = "1P";
 		String skin2p = "2P";

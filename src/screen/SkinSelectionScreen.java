@@ -37,7 +37,7 @@ public class SkinSelectionScreen extends Screen{
         draw();
         if (this.selectionCooldown.checkFinished() && this.inputDelay.checkFinished()) {
             if(inputManager.isKeyDown(KeyEvent.VK_ESCAPE)){this.returnCode = 2; isRunning = false;}
-            if (inputManager.isKeyDown(KeyEvent.VK_UP) && skincode_1p> 0) {
+            if (inputManager.isKeyDown(KeyEvent.VK_UP) && skincode_1p > 0) {
                 skincode_1p--;
                 this.selectionCooldown.reset();
             }

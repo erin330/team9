@@ -151,12 +151,12 @@ public final class Core {
 			else gameState = new GameState(1, 0, MAX_LIVES, MAX_LIVES, 0, 0, 0, 0);
 
 			switch (returnCode) {
-                case 0:
-                    currentScreen = new LoginScreen(width, height, FPS);LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-                        + " title screen at " + FPS + " fps.");
-                    returnCode = frame.setScreen(currentScreen);
-                    LOGGER.info("Closing title screen.");
-                    break;
+			case 0:
+				currentScreen = new LoginScreen(width, height, FPS);LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+					+ " title screen at " + FPS + " fps.");
+				returnCode = frame.setScreen(currentScreen);
+				LOGGER.info("Closing title screen.");
+				break;
 			case 1:
 				// Main menu.
 				SoundManager.resetBGM();
@@ -299,7 +299,7 @@ public final class Core {
 				LOGGER.info("Closing Achievement screen.");
 				SoundManager.stopSound("achievement",2f);
 				break;
-			case 2:
+			case 8:
 				// Select Mode.
 				SoundManager.stopSound("menu",2f);
 				SoundManager.playSound("BGM/B_Main_c", "selection", true, true);
@@ -309,7 +309,7 @@ public final class Core {
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing select screen.");
 				break;
-			case 8:
+			case 2:
 				// Select Skin.
 				currentScreen = new SkinSelectionScreen(width, height, FPS);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
