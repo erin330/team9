@@ -46,7 +46,7 @@ public class LoginScreen extends Screen {
 		super(width, height, fps);
 
 		// Defaults to play.
-		this.returnCode = 2;
+		this.returnCode = 8;
 		this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
 		this.selectionCooldown.reset();
 		this.name = "AAA".toCharArray();
@@ -111,7 +111,7 @@ public class LoginScreen extends Screen {
 						logger.warning("Couldn't load or save player! Error: " + e.getMessage());
 					}
 
-					// Proceed to main menu.
+					// Proceed to skin selection menu.
 					this.returnCode = 8;
 					this.isRunning = false;
 			}

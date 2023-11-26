@@ -23,7 +23,7 @@ public class SkinSelectionScreen extends Screen{
 
         super(width, height, fps);
 
-        this.returnCode = 9;
+        this.returnCode = 1;
         this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
         this.selectionCooldown.reset();
 
@@ -36,7 +36,7 @@ public class SkinSelectionScreen extends Screen{
         super.update();
         draw();
         if (this.selectionCooldown.checkFinished() && this.inputDelay.checkFinished()) {
-            if(inputManager.isKeyDown(KeyEvent.VK_ESCAPE)){this.returnCode = 2; isRunning = false;}
+            if(inputManager.isKeyDown(KeyEvent.VK_ESCAPE)){this.returnCode = 1; isRunning = false;}
             if (inputManager.isKeyDown(KeyEvent.VK_UP) && skincode_1p > 0) {
                 skincode_1p--;
                 this.selectionCooldown.reset();

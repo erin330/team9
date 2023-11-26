@@ -149,8 +149,8 @@ public final class Core {
 
 			switch (returnCode) {
 			case 0:
-				currentScreen = new LoginScreen(width, height, FPS);LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-					+ " title screen at " + FPS + " fps.");
+				currentScreen = new SelectScreen(width, height, FPS);
+				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT + " title screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing title screen.");
 				break;
@@ -165,13 +165,13 @@ public final class Core {
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing title screen.");
 				break;
-			case 2:
-				// Select Mode.
+			case 9:
+				// Login screen.
 				SoundManager.stopSound("menu",2f);
 				SoundManager.playSound("BGM/B_Main_c", "selection", true, true);
-				currentScreen = new SelectScreen(width, height, FPS);
+				currentScreen = new LoginScreen(width, height, FPS);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
-						+ " select screen at " + FPS + " fps.");
+						+ " login screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing select screen.");
 				break;
@@ -314,7 +314,7 @@ public final class Core {
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing SkinSelection screen.");
 				break;
-			case 9:
+			case 2:
 				//Select level.
 				currentScreen = new LevelSelectionScreen(width, height, FPS, gameSettings.size());
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
