@@ -947,10 +947,12 @@ public final class DrawManager {
 
 	/**
 	 * Draws level selection screen.
-	 * @param screen
+	 * @param screen 		Screen to draw on.
+	 * @param levelcode 	Current level selected.
+	 * @param levelList 	List of levels.
 	 *
 	 */
-	public void drawLevelSelectionMenu(final Screen screen, final int levelcode, final int numberLevel) {
+	public void drawLevelSelectionMenu(final Screen screen, final int levelcode, final List<GameSettings> levelList) {
 		String titleString = "Level";
 		String instructionsString = "Press Space to start";
 
@@ -960,13 +962,13 @@ public final class DrawManager {
 		drawCenteredRegularString(screen, instructionsString, screen.getHeight() / 5);
 
 		backBufferGraphics.setColor(Color.WHITE);
-		for (int i = 1; i <= numberLevel; i++) {
+		for (int i = 0; i < levelList.size(); i++) {
 			if (levelcode == i){
 				backBufferGraphics.setColor(Color.GREEN);
 			} else {
 				backBufferGraphics.setColor(Color.WHITE);
 			}
-			drawCenteredRegularString(screen, (i==8)? "Level Random" : String.format("Level %s", i), screen.getHeight() / 5 + fontRegularMetrics.getHeight() * (i + 1) * 2);
+			drawCenteredRegularString(screen, String.format("Level %s", levelList.get(i).getLevelName()), screen.getHeight() / 4 + fontRegularMetrics.getHeight() * (i + 1) * 2);
 		}
 	}
 
