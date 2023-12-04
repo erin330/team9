@@ -55,6 +55,16 @@ public final class DrawManager {
 	/** Big sized font properties. */
 	private static FontMetrics fontBigMetrics;
 
+	private static Font fontRegularKr;
+	private static FontMetrics fontRegularKrMetrics;
+	private static Font fontBigKr;
+	private static FontMetrics fontBigKrMetrics;
+
+	private static Font fontRegularCn;
+	private static FontMetrics fontRegularCnMetrics;
+	private static Font fontBigCn;
+	private static FontMetrics fontBigCnMetrics;
+
 	/** Sprite types mapped to their images. */
 	private static Map<SpriteType, boolean[][]> spriteMap;
 
@@ -149,6 +159,10 @@ public final class DrawManager {
 			// Font loading.
 			fontRegular = fileManager.loadFont(14f);
 			fontBig = fileManager.loadFont(24f);
+			fontRegularKr = fileManager.loadKrFont(16f);
+			fontBigKr = fileManager.loadKrFont(28f);
+			fontRegularCn = fileManager.loadCnFont(16f);
+			fontBigCn = fileManager.loadCnFont(28f);
 			logger.info("Finished loading the fonts.");
 
 		} catch (IOException e) {
@@ -199,6 +213,10 @@ public final class DrawManager {
 
 		fontRegularMetrics = backBufferGraphics.getFontMetrics(fontRegular);
 		fontBigMetrics = backBufferGraphics.getFontMetrics(fontBig);
+		fontRegularKrMetrics = backBufferGraphics.getFontMetrics(fontRegularKr);
+		fontBigKrMetrics = backBufferGraphics.getFontMetrics(fontBigKr);
+		fontRegularCnMetrics = backBufferGraphics.getFontMetrics(fontRegularCn);
+		fontBigCnMetrics = backBufferGraphics.getFontMetrics(fontBigCn);
 
 		// drawBorders(screen);
 		// drawGrid(screen);
@@ -456,22 +474,86 @@ public final class DrawManager {
 	}
 
 	/**
+	 * Lang Select
+	 */
+
+	public void drawLangDesc(final Screen screen) {
+		String langDescString =
+				"Language";
+
+		backBufferGraphics.setColor(Color.GRAY);
+		drawCenteredRegularString(screen, langDescString,
+				screen.getHeight() /2 - fontRegularMetrics.getHeight()*3/2-fontRegularMetrics.getHeight()*2);
+	}
+
+	public void drawLangMenu(final Screen screen, final int option) {
+		String enString = "English";
+		String krString = "한국어";
+		String cnString = "中国語";
+
+		if (option == 0)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, enString,
+				screen.getHeight() / 3 * 2 -fontRegularMetrics.getHeight()*3-fontRegularMetrics.getHeight()*2);
+		if (option == 1)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularStringKr(screen, krString, screen.getHeight()
+				/ 3 * 2 + fontRegularKrMetrics.getHeight()-fontRegularKrMetrics.getHeight()*2-fontRegularKrMetrics.getHeight()*2);
+
+		if (option == 2)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularStringCn(screen, cnString, screen.getHeight() / 3
+				* 2 + fontRegularCnMetrics.getHeight() * 3-fontRegularCnMetrics.getHeight()*2-fontRegularCnMetrics.getHeight()*2);
+	}
+
+	/**
 	 * Draws game title.x
 	 *
 	 * @param screen
 	 *            Screen to draw on.
 	 */
 	public void drawTitle(final Screen screen) {
-		String titleString = "Invaders";
-		String instructionsString =
-				"select with w+s / arrows, confirm with space";
+		String titleString;
+		String instructionsString;
+		if (Lang.lang == 2) {
+			titleString = "侵略者";
+			instructionsString =
+					"用w+s或箭头键选择,用空格键确认";
+			backBufferGraphics.setColor(Color.GRAY);
+			drawCenteredRegularStringCn(screen, instructionsString,
+					screen.getHeight() /2 - fontRegularCnMetrics.getHeight()*3/2-fontRegularCnMetrics.getHeight()*2);
 
-		backBufferGraphics.setColor(Color.GRAY);
-		drawCenteredRegularString(screen, instructionsString,
-				screen.getHeight() /2 - fontRegularMetrics.getHeight()*3/2-fontRegularMetrics.getHeight()*2);
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredBigStringKr(screen, titleString, screen.getHeight() / 3-fontRegularKrMetrics.getHeight()*2);
+		}
+		else if (Lang.lang == 1) {
+			titleString = "인베이더";
+			instructionsString =
+					"w+s나 화살표로 선택하고, 스페이스 바로 선택하세요";
+			backBufferGraphics.setColor(Color.GRAY);
+			drawCenteredRegularStringKr(screen, instructionsString,
+					screen.getHeight() /2 - fontRegularKrMetrics.getHeight()*3/2-fontRegularKrMetrics.getHeight()*2);
 
-		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredBigString(screen, titleString, screen.getHeight() / 3-fontRegularMetrics.getHeight()*2);
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredBigStringKr(screen, titleString, screen.getHeight() / 3-fontRegularKrMetrics.getHeight()*2);
+		}
+		else {
+			titleString = "Invaders";
+			instructionsString =
+					"select with w+s / arrows, confirm with space";
+			backBufferGraphics.setColor(Color.GRAY);
+			drawCenteredRegularString(screen, instructionsString,
+					screen.getHeight() /2 - fontRegularMetrics.getHeight()*3/2-fontRegularMetrics.getHeight()*2);
+
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredBigString(screen, titleString, screen.getHeight() / 3-fontRegularMetrics.getHeight()*2);
+		}
 	}
 
 	/**
@@ -483,51 +565,154 @@ public final class DrawManager {
 	 *            Option selected.
 	 */
 	public void drawMenu(final Screen screen, final int option) {
-		String playString = "Play";
-		String highScoresString = "High scores";
-		String shopString = "Shop";
-		String settingString = "Setting";
-		String exitString = "exit";
-		String achievementString = "Achievements";
+		String playString;
+		String highScoresString;
+		String shopString;
+		String settingString;
+		String exitString;
+		String achievementString;
 
-		if (option == 2)
-			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, playString,
-				screen.getHeight() / 3 * 2 -fontRegularMetrics.getHeight()*3-fontRegularMetrics.getHeight()*2);
-		if (option == 3)
-			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, highScoresString, screen.getHeight()
-				/ 3 * 2 + fontRegularMetrics.getHeight()-fontRegularMetrics.getHeight()*2-fontRegularMetrics.getHeight()*2);
+		if (Lang.lang == 2) {
+			playString = "玩儿";
+			highScoresString = "高分";
+			shopString = "商店";
+			settingString = "设置";
+			exitString = "出口";
+			achievementString = "业绩";
 
-		if (option == 4)
-			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, shopString, screen.getHeight() / 3
-				* 2 + fontRegularMetrics.getHeight() * 3-fontRegularMetrics.getHeight()*2-fontRegularMetrics.getHeight()*2);
+			if (option == 2)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringCn(screen, playString,
+					screen.getHeight() / 3 * 2 -fontRegularCnMetrics.getHeight()*3-fontRegularCnMetrics.getHeight()*2);
+			if (option == 3)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringCn(screen, highScoresString, screen.getHeight()
+					/ 3 * 2 + fontRegularCnMetrics.getHeight()-fontRegularCnMetrics.getHeight()*2-fontRegularCnMetrics.getHeight()*2);
 
-		if (option == 5)
-			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, settingString, screen.getHeight() / 3
-				* 2 + fontRegularMetrics.getHeight() * 3-fontRegularMetrics.getHeight()*2);
-		if (option == 6)
-			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, achievementString, screen.getHeight() / 3
-				* 2 + fontRegularMetrics.getHeight() * 5-fontRegularMetrics.getHeight()*2);
-		if (option == 0)
-			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, exitString, screen.getHeight() / 3
-				* 2 + fontRegularMetrics.getHeight() * 7-fontRegularMetrics.getHeight()*2);
+			if (option == 4)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringCn(screen, shopString, screen.getHeight() / 3
+					* 2 + fontRegularCnMetrics.getHeight() * 3-fontRegularCnMetrics.getHeight()*2-fontRegularCnMetrics.getHeight()*2);
+
+			if (option == 5)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringCn(screen, settingString, screen.getHeight() / 3
+					* 2 + fontRegularCnMetrics.getHeight() * 3-fontRegularCnMetrics.getHeight()*2);
+			if (option == 6)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringCn(screen, achievementString, screen.getHeight() / 3
+					* 2 + fontRegularCnMetrics.getHeight() * 5-fontRegularCnMetrics.getHeight()*2);
+			if (option == 0)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringCn(screen, exitString, screen.getHeight() / 3
+					* 2 + fontRegularCnMetrics.getHeight() * 7-fontRegularCnMetrics.getHeight()*2);
+		}
+		else if (Lang.lang == 1) {
+			playString = "플레이";
+			highScoresString = "하이스코어";
+			shopString = "상점";
+			settingString = "설정";
+			exitString = "나가기";
+			achievementString = "업적";
+
+			if (option == 2)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringKr(screen, playString,
+					screen.getHeight() / 3 * 2 -fontRegularKrMetrics.getHeight()*3-fontRegularKrMetrics.getHeight()*2);
+			if (option == 3)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringKr(screen, highScoresString, screen.getHeight()
+					/ 3 * 2 + fontRegularKrMetrics.getHeight()-fontRegularKrMetrics.getHeight()*2-fontRegularKrMetrics.getHeight()*2);
+
+			if (option == 4)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringKr(screen, shopString, screen.getHeight() / 3
+					* 2 + fontRegularKrMetrics.getHeight() * 3-fontRegularKrMetrics.getHeight()*2-fontRegularKrMetrics.getHeight()*2);
+
+			if (option == 5)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringKr(screen, settingString, screen.getHeight() / 3
+					* 2 + fontRegularKrMetrics.getHeight() * 3-fontRegularKrMetrics.getHeight()*2);
+			if (option == 6)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringKr(screen, achievementString, screen.getHeight() / 3
+					* 2 + fontRegularKrMetrics.getHeight() * 5-fontRegularKrMetrics.getHeight()*2);
+			if (option == 0)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringKr(screen, exitString, screen.getHeight() / 3
+					* 2 + fontRegularKrMetrics.getHeight() * 7-fontRegularKrMetrics.getHeight()*2);
+		}
+		else {
+			playString = "Play";
+			highScoresString = "High scores";
+			shopString = "Shop";
+			settingString = "Setting";
+			exitString = "exit";
+			achievementString = "Achievements";
+
+			if (option == 2)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularString(screen, playString,
+					screen.getHeight() / 3 * 2 -fontRegularMetrics.getHeight()*3-fontRegularMetrics.getHeight()*2);
+			if (option == 3)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularString(screen, highScoresString, screen.getHeight()
+					/ 3 * 2 + fontRegularMetrics.getHeight()-fontRegularMetrics.getHeight()*2-fontRegularMetrics.getHeight()*2);
+
+			if (option == 4)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularString(screen, shopString, screen.getHeight() / 3
+					* 2 + fontRegularMetrics.getHeight() * 3-fontRegularMetrics.getHeight()*2-fontRegularMetrics.getHeight()*2);
+
+			if (option == 5)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularString(screen, settingString, screen.getHeight() / 3
+					* 2 + fontRegularMetrics.getHeight() * 3-fontRegularMetrics.getHeight()*2);
+			if (option == 6)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularString(screen, achievementString, screen.getHeight() / 3
+					* 2 + fontRegularMetrics.getHeight() * 5-fontRegularMetrics.getHeight()*2);
+			if (option == 0)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularString(screen, exitString, screen.getHeight() / 3
+					* 2 + fontRegularMetrics.getHeight() * 7-fontRegularMetrics.getHeight()*2);
+		}
 	}
 
 	/**
@@ -550,29 +735,89 @@ public final class DrawManager {
 	public void drawResults(final Screen screen, final int score,
 							final int livesRemaining1, final int shipsDestroyed,
 							final float accuracy, final boolean isNewRecord) {
-		String scoreString = String.format("score %04d", score);
-		String acquiredCoins = "bonus-coins " + score/10;
-		String lives1RemainingString = "lives remaining " + livesRemaining1;
-		String shipsDestroyedString = "enemies destroyed " + shipsDestroyed;
-		String accuracyString = String
-				.format("accuracy %.2f%%", accuracy * 100);
+		String scoreString;
+		String acquiredCoins;
+		String lives1RemainingString;
+		String shipsDestroyedString;
+		String accuracyString;
 
-		int height = isNewRecord ? 4 : 2;
+		int height;
 
-		backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, scoreString, screen.getHeight()
-				/ height);
-		drawCenteredRegularString(screen, acquiredCoins,
-				screen.getHeight() / height + fontRegularMetrics.getHeight()
-						* 3);
-		drawCenteredRegularString(screen, lives1RemainingString,
-				screen.getHeight() / height + fontRegularMetrics.getHeight()
-						* 4);
-		drawCenteredRegularString(screen, shipsDestroyedString,
-				screen.getHeight() / height + fontRegularMetrics.getHeight()
-						* 5);
-		drawCenteredRegularString(screen, accuracyString, screen.getHeight()
-				/ height + fontRegularMetrics.getHeight() * 6);
+		if (Lang.lang == 2) {
+			scoreString = String.format("记分 %04d", score);
+			acquiredCoins = "奖金硬币 " + score/10;
+			lives1RemainingString = "剩余寿命 " + livesRemaining1;
+			shipsDestroyedString = "被摧毁的敌人 " + shipsDestroyed;
+			accuracyString = String
+					.format("精度 %.2f%%", accuracy * 100);
+
+			height = isNewRecord ? 4 : 2;
+
+			backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringCn(screen, scoreString, screen.getHeight()
+					/ height);
+			drawCenteredRegularStringCn(screen, acquiredCoins,
+					screen.getHeight() / height + fontRegularCnMetrics.getHeight()
+							* 3);
+			drawCenteredRegularStringCn(screen, lives1RemainingString,
+					screen.getHeight() / height + fontRegularCnMetrics.getHeight()
+							* 4);
+			drawCenteredRegularStringCn(screen, shipsDestroyedString,
+					screen.getHeight() / height + fontRegularCnMetrics.getHeight()
+							* 5);
+			drawCenteredRegularStringCn(screen, accuracyString, screen.getHeight()
+					/ height + fontRegularCnMetrics.getHeight() * 6);
+		}
+		else if (Lang.lang == 1) {
+			scoreString = String.format("점수 %04d", score);
+			acquiredCoins = "보너스 코인 " + score/10;
+			lives1RemainingString = "남은 목숨 " + livesRemaining1;
+			shipsDestroyedString = "파괴된 적의 수 " + shipsDestroyed;
+			accuracyString = String
+					.format("명중률 %.2f%%", accuracy * 100);
+
+			height = isNewRecord ? 4 : 2;
+
+			backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringKr(screen, scoreString, screen.getHeight()
+					/ height);
+			drawCenteredRegularStringKr(screen, acquiredCoins,
+					screen.getHeight() / height + fontRegularKrMetrics.getHeight()
+							* 3);
+			drawCenteredRegularStringKr(screen, lives1RemainingString,
+					screen.getHeight() / height + fontRegularKrMetrics.getHeight()
+							* 4);
+			drawCenteredRegularStringKr(screen, shipsDestroyedString,
+					screen.getHeight() / height + fontRegularKrMetrics.getHeight()
+							* 5);
+			drawCenteredRegularStringKr(screen, accuracyString, screen.getHeight()
+					/ height + fontRegularKrMetrics.getHeight() * 6);
+		}
+		else {
+			scoreString = String.format("score %04d", score);
+			acquiredCoins = "bonus-coins " + score/10;
+			lives1RemainingString = "lives remaining " + livesRemaining1;
+			shipsDestroyedString = "enemies destroyed " + shipsDestroyed;
+			accuracyString = String
+					.format("accuracy %.2f%%", accuracy * 100);
+
+			height = isNewRecord ? 4 : 2;
+
+			backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularString(screen, scoreString, screen.getHeight()
+					/ height);
+			drawCenteredRegularString(screen, acquiredCoins,
+					screen.getHeight() / height + fontRegularMetrics.getHeight()
+							* 3);
+			drawCenteredRegularString(screen, lives1RemainingString,
+					screen.getHeight() / height + fontRegularMetrics.getHeight()
+							* 4);
+			drawCenteredRegularString(screen, shipsDestroyedString,
+					screen.getHeight() / height + fontRegularMetrics.getHeight()
+							* 5);
+			drawCenteredRegularString(screen, accuracyString, screen.getHeight()
+					/ height + fontRegularMetrics.getHeight() * 6);
+		}
 	}
 
 	/**
@@ -598,36 +843,111 @@ public final class DrawManager {
 	public void drawResults(final Screen screen, final int score,
 							final int livesRemaining1, final int livesRemaining2, final int shipsDestroyed,
 							final float accuracy, final float accuracy2, final boolean isNewRecord) {
-		String scoreString = String.format("score %04d", score);
-		String acquiredCoins = String.format("bonus-coins %04d", score%10);
-		String lives1RemainingString = "1p's lives remaining " + livesRemaining1;
-		String lives2RemainingString = "2p's lives remaining " + livesRemaining2;
-		String shipsDestroyedString = "enemies destroyed " + shipsDestroyed;
-		String accuracyString = String
-				.format("1p's accuracy %.2f%%", accuracy * 100);
-		String accuracyString2 = String
-				.format("2p's accuracy %.2f%%", accuracy2 * 100);
+		String scoreString;
+		String acquiredCoins;
+		String lives1RemainingString;
+		String lives2RemainingString;
+		String shipsDestroyedString;
+		String accuracyString;
+		String accuracyString2;
+		int height;
 
-		int height = isNewRecord ? 4 : 3;
+		if (Lang.lang == 2) {
+			scoreString = String.format("记分 %04d", score);
+			acquiredCoins = String.format("奖金硬币 %04d", score%10);
+			lives1RemainingString = "1p的剩余寿命 " + livesRemaining1;
+			lives2RemainingString = "2p的剩余寿命 " + livesRemaining2;
+			shipsDestroyedString = "被摧毁的敌人 " + shipsDestroyed;
+			accuracyString = String
+					.format("1p的精度 %.2f%%", accuracy * 100);
+			accuracyString2 = String
+					.format("2p的精度 %.2f%%", accuracy2 * 100);
 
-		backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, scoreString, screen.getHeight()
-				/ height);
-		drawCenteredRegularString(screen, acquiredCoins, screen.getHeight()
-						);
-		drawCenteredRegularString(screen, lives1RemainingString,
-				screen.getHeight() / height + fontRegularMetrics.getHeight()
-						* 2);
-		drawCenteredRegularString(screen, lives2RemainingString,
-				screen.getHeight() / height + fontRegularMetrics.getHeight()
-						* 4);
-		drawCenteredRegularString(screen, shipsDestroyedString,
-				screen.getHeight() / height + fontRegularMetrics.getHeight()
-						* 6);
-		drawCenteredRegularString(screen, accuracyString, screen.getHeight()
-				/ height + fontRegularMetrics.getHeight() * 8);
-		drawCenteredRegularString(screen, accuracyString2, screen.getHeight()
-				/ height + fontRegularMetrics.getHeight() * 10);
+			height = isNewRecord ? 4 : 3;
+
+			backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringCn(screen, scoreString, screen.getHeight()
+					/ height);
+			drawCenteredRegularStringCn(screen, acquiredCoins, screen.getHeight()
+			);
+			drawCenteredRegularStringCn(screen, lives1RemainingString,
+					screen.getHeight() / height + fontRegularCnMetrics.getHeight()
+							* 2);
+			drawCenteredRegularStringCn(screen, lives2RemainingString,
+					screen.getHeight() / height + fontRegularCnMetrics.getHeight()
+							* 4);
+			drawCenteredRegularStringCn(screen, shipsDestroyedString,
+					screen.getHeight() / height + fontRegularCnMetrics.getHeight()
+							* 6);
+			drawCenteredRegularStringCn(screen, accuracyString, screen.getHeight()
+					/ height + fontRegularCnMetrics.getHeight() * 8);
+			drawCenteredRegularStringCn(screen, accuracyString2, screen.getHeight()
+					/ height + fontRegularCnMetrics.getHeight() * 10);
+		}
+		else if (Lang.lang == 1) {
+			scoreString = String.format("점수 %04d", score);
+			acquiredCoins = String.format("보너스 코인 %04d", score%10);
+			lives1RemainingString = "1p의 남은 목숨 " + livesRemaining1;
+			lives2RemainingString = "2p의 남은 목숨 " + livesRemaining2;
+			shipsDestroyedString = "파괴된 적의 수 " + shipsDestroyed;
+			accuracyString = String
+					.format("1p의 명중률 %.2f%%", accuracy * 100);
+			accuracyString2 = String
+					.format("2p의 명중률 %.2f%%", accuracy2 * 100);
+
+			height = isNewRecord ? 4 : 3;
+
+			backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringKr(screen, scoreString, screen.getHeight()
+					/ height);
+			drawCenteredRegularStringKr(screen, acquiredCoins, screen.getHeight()
+			);
+			drawCenteredRegularStringKr(screen, lives1RemainingString,
+					screen.getHeight() / height + fontRegularKrMetrics.getHeight()
+							* 2);
+			drawCenteredRegularStringKr(screen, lives2RemainingString,
+					screen.getHeight() / height + fontRegularKrMetrics.getHeight()
+							* 4);
+			drawCenteredRegularStringKr(screen, shipsDestroyedString,
+					screen.getHeight() / height + fontRegularKrMetrics.getHeight()
+							* 6);
+			drawCenteredRegularStringKr(screen, accuracyString, screen.getHeight()
+					/ height + fontRegularKrMetrics.getHeight() * 8);
+			drawCenteredRegularStringKr(screen, accuracyString2, screen.getHeight()
+					/ height + fontRegularKrMetrics.getHeight() * 10);
+		}
+		else {
+			scoreString = String.format("score %04d", score);
+			acquiredCoins = String.format("bonus-coins %04d", score%10);
+			lives1RemainingString = "1p's lives remaining " + livesRemaining1;
+			lives2RemainingString = "2p's lives remaining " + livesRemaining2;
+			shipsDestroyedString = "enemies destroyed " + shipsDestroyed;
+			accuracyString = String
+					.format("1p's accuracy %.2f%%", accuracy * 100);
+			accuracyString2 = String
+					.format("2p's accuracy %.2f%%", accuracy2 * 100);
+
+			height = isNewRecord ? 4 : 3;
+
+			backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularString(screen, scoreString, screen.getHeight()
+					/ height);
+			drawCenteredRegularString(screen, acquiredCoins, screen.getHeight()
+			);
+			drawCenteredRegularString(screen, lives1RemainingString,
+					screen.getHeight() / height + fontRegularMetrics.getHeight()
+							* 2);
+			drawCenteredRegularString(screen, lives2RemainingString,
+					screen.getHeight() / height + fontRegularMetrics.getHeight()
+							* 4);
+			drawCenteredRegularString(screen, shipsDestroyedString,
+					screen.getHeight() / height + fontRegularMetrics.getHeight()
+							* 6);
+			drawCenteredRegularString(screen, accuracyString, screen.getHeight()
+					/ height + fontRegularMetrics.getHeight() * 8);
+			drawCenteredRegularString(screen, accuracyString2, screen.getHeight()
+					/ height + fontRegularMetrics.getHeight() * 10);
+		}
 	}
 
 	/**
@@ -642,15 +962,41 @@ public final class DrawManager {
 	 */
 	public void drawNameInput(final Screen screen, final char[] name,
 							  final int nameCharSelected) {
-		String newRecordString = "New Record!";
-		String introduceNameString = "Introduce name:";
+		String newRecordString;
+		String introduceNameString;
 
-		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredRegularString(screen, newRecordString, screen.getHeight()
-				* 11 / 60);
-		backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, introduceNameString,
-				screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 12);
+		if (Lang.lang == 2) {
+			newRecordString = "新记录！";
+			introduceNameString = "输入姓名:";
+
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredRegularStringCn(screen, newRecordString, screen.getHeight()
+					* 11 / 60);
+			backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringCn(screen, introduceNameString,
+					screen.getHeight() / 4 + fontRegularCnMetrics.getHeight() * 12);
+		} else if (Lang.lang == 1) {
+			newRecordString = "신기록 갱신!";
+			introduceNameString = "이름 입력:";
+
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredRegularStringKr(screen, newRecordString, screen.getHeight()
+					* 11 / 60);
+			backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringKr(screen, introduceNameString,
+					screen.getHeight() / 4 + fontRegularKrMetrics.getHeight() * 12);
+		}
+		else {
+			newRecordString = "New Record!";
+			introduceNameString = "Introduce name:";
+
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredRegularString(screen, newRecordString, screen.getHeight()
+					* 11 / 60);
+			backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularString(screen, introduceNameString,
+					screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 12);
+		}
 
 		// 3 letters name.
 		int positionX = screen.getWidth()
@@ -681,11 +1027,29 @@ public final class DrawManager {
 	//Login Screen Name Input
 	public void drawUsernameInput(final Screen screen, final char[] name,
 							  final int nameCharSelected) {
-		String introduceUsernameString = "Username:";
+		String introduceUsernameString;
 
-		backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, introduceUsernameString,
-				screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 3);
+		if (Lang.lang == 2) {
+			introduceUsernameString = "名称:";
+
+			backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringCn(screen, introduceUsernameString,
+					screen.getHeight() / 4 + fontRegularCnMetrics.getHeight() * 3);
+		}
+		else if (Lang.lang == 1) {
+			introduceUsernameString = "닉네임:";
+
+			backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringKr(screen, introduceUsernameString,
+					screen.getHeight() / 4 + fontRegularKrMetrics.getHeight() * 3);
+		}
+		else {
+			introduceUsernameString = "Username:";
+
+			backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularString(screen, introduceUsernameString,
+					screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 3);
+		}
 
 		// 3 letters name.
 		int positionX = screen.getWidth()
@@ -830,22 +1194,54 @@ public final class DrawManager {
 	 */
 	public void drawGameOver(final Screen screen, final boolean acceptsInput,
 							 final boolean isNewRecord) {
-		String gameOverString = "Game Over";
-		String continueOrExitString =
-				"Press Space to play again, Escape to exit";
-
+		String gameOverString;
+		String continueOrExitString;
 		int height = isNewRecord ? 4 : 3;
 
-		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredBigString(screen, gameOverString, screen.getHeight()
-				/ height - fontBigMetrics.getHeight() * 2);
-
-		if (acceptsInput)
+		if (Lang.lang == 2) {
+			gameOverString = "比赛结束！";
+			continueOrExitString =
+					"按 Space 重新播放, Esc 退出";
 			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.GRAY);
-		drawCenteredRegularString(screen, continueOrExitString,
-				screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 10);
+			drawCenteredBigStringCn(screen, gameOverString, screen.getHeight()
+					/ height - fontBigCnMetrics.getHeight() * 2);
+			if (acceptsInput)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.GRAY);
+			drawCenteredRegularStringCn(screen, continueOrExitString,
+					screen.getHeight() / 2 + fontRegularCnMetrics.getHeight() * 10);
+		}
+		else if (Lang.lang == 1) {
+			gameOverString = "게임 오버!";
+			continueOrExitString =
+					"다시 플레이하려면 스페이스 바를, 나가려면 Esc를 누르세요";
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredBigStringKr(screen, gameOverString, screen.getHeight()
+					/ height - fontBigKrMetrics.getHeight() * 2);
+			if (acceptsInput)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.GRAY);
+			drawCenteredRegularStringKr(screen, continueOrExitString,
+					screen.getHeight() / 2 + fontRegularKrMetrics.getHeight() * 10);
+		}
+		else {
+			gameOverString = "Game Over";
+			continueOrExitString =
+					"Press Space to play again, Escape to exit";
+
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredBigString(screen, gameOverString, screen.getHeight()
+					/ height - fontBigMetrics.getHeight() * 2);
+
+			if (acceptsInput)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.GRAY);
+			drawCenteredRegularString(screen, continueOrExitString,
+					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 10);
+		}
 	}
 
 	/**
@@ -856,12 +1252,21 @@ public final class DrawManager {
 	 */
 	public void
 	drawSkinSelectionMenu(final Screen screen, final int skincode1p,final int skincode2p){
-		String SkinString = "Select Your Ship Design!";
+		String SkinString;
 		String skin1p = "1P";
 		String skin2p = "2P";
 		Ship[] shipskin = new Ship[6];
 		Ship[] shipskin2 = new Ship[6];
 
+		if (Lang.lang == 2) {
+			SkinString = "选择您的船舶设计！";
+		}
+		else if (Lang.lang == 1) {
+			SkinString = "우주선의 디자인을 고르세요!";
+		}
+		else {
+			SkinString = "Select Your Ship Design!";
+		}
 
 		if (SelectScreen.gameMode == 2) {
 			backBufferGraphics.setColor(Color.white);
@@ -1070,26 +1475,77 @@ public final class DrawManager {
 
 
 	public void drawHighScoreMenu(final Screen screen) {
-		String highScoreString = "High Scores";
-		String instructionsString = "Press Space to return";
-		String gameMode_1 = "1P_Mode";
-		String gameMode_2 = "2P_Mode";
+		String highScoreString;
+		String instructionsString;
+		String gameMode_1;
+		String gameMode_2;
 
-		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredBigString(screen, highScoreString, screen.getHeight() / 8);
+		if (Lang.lang == 2) {
+			highScoreString = "高分";
+			instructionsString = "按Space返回";
+			gameMode_1 = "1P_模式";
+			gameMode_2 = "2P_模式";
+
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredBigStringCn(screen, highScoreString, screen.getHeight() / 8);
 
 
-		backBufferGraphics.setColor(Color.GRAY);
-		drawCenteredRegularString(screen, instructionsString,
-				screen.getHeight() / 5);
+			backBufferGraphics.setColor(Color.GRAY);
+			drawCenteredRegularStringCn(screen, instructionsString,
+					screen.getHeight() / 5);
 
-		backBufferGraphics.setColor(Color.GRAY);
-		drawLeftsideRegularString(screen, gameMode_1,
-				screen.getHeight()*4 / 15);
+			backBufferGraphics.setColor(Color.GRAY);
+			drawLeftsideRegularStringCn(screen, gameMode_1,
+					screen.getHeight()*4 / 15);
 
-		backBufferGraphics.setColor(Color.GRAY);
-		drawRightsideRegularString(screen, gameMode_2,
-				screen.getHeight()*4 / 15);
+			backBufferGraphics.setColor(Color.GRAY);
+			drawRightsideRegularStringCn(screen, gameMode_2,
+					screen.getHeight()*4 / 15);
+		}
+		else if (Lang.lang == 1) {
+			highScoreString = "하이 스코어";
+			instructionsString = "돌아가려면 스페이스 바를 누르세요";
+			gameMode_1 = "1P_모드";
+			gameMode_2 = "2P_모드";
+
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredBigStringKr(screen, highScoreString, screen.getHeight() / 8);
+
+
+			backBufferGraphics.setColor(Color.GRAY);
+			drawCenteredRegularStringKr(screen, instructionsString,
+					screen.getHeight() / 5);
+
+			backBufferGraphics.setColor(Color.GRAY);
+			drawLeftsideRegularStringKr(screen, gameMode_1,
+					screen.getHeight()*4 / 15);
+
+			backBufferGraphics.setColor(Color.GRAY);
+			drawRightsideRegularStringKr(screen, gameMode_2,
+					screen.getHeight()*4 / 15);
+		}
+		else {
+			highScoreString = "High Scores";
+			instructionsString = "Press Space to return";
+			gameMode_1 = "1P_Mode";
+			gameMode_2 = "2P_Mode";
+
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredBigString(screen, highScoreString, screen.getHeight() / 8);
+
+
+			backBufferGraphics.setColor(Color.GRAY);
+			drawCenteredRegularString(screen, instructionsString,
+					screen.getHeight() / 5);
+
+			backBufferGraphics.setColor(Color.GRAY);
+			drawLeftsideRegularString(screen, gameMode_1,
+					screen.getHeight()*4 / 15);
+
+			backBufferGraphics.setColor(Color.GRAY);
+			drawRightsideRegularString(screen, gameMode_2,
+					screen.getHeight()*4 / 15);
+		}
 	}
 
 	/**
@@ -1154,6 +1610,20 @@ public final class DrawManager {
 		backBufferGraphics.drawString(string, screen.getWidth() / 2
 				- fontRegularMetrics.stringWidth(string) / 2, height);
 	}
+
+	public void drawCenteredRegularStringKr(final Screen screen,
+										  final String string, final int height) {
+		backBufferGraphics.setFont(fontRegularKr);
+		backBufferGraphics.drawString(string, screen.getWidth() / 2
+				- fontRegularKrMetrics.stringWidth(string) / 2, height);
+	}
+
+	public void drawCenteredRegularStringCn(final Screen screen,
+										  final String string, final int height) {
+		backBufferGraphics.setFont(fontRegularCn);
+		backBufferGraphics.drawString(string, screen.getWidth() / 2
+				- fontRegularCnMetrics.stringWidth(string) / 2, height);
+	}
 	/**
 	 * Draws a left sided string on regular font.
 	 *
@@ -1169,6 +1639,20 @@ public final class DrawManager {
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.drawString(string, screen.getWidth()*3 / 13
 				- fontRegularMetrics.stringWidth(string) / 2, height);
+	}
+
+	public void drawLeftsideRegularStringKr(final Screen screen,
+										  final String string, final int height) {
+		backBufferGraphics.setFont(fontRegularKr);
+		backBufferGraphics.drawString(string, screen.getWidth()*3 / 13
+				- fontRegularKrMetrics.stringWidth(string) / 2, height);
+	}
+
+	public void drawLeftsideRegularStringCn(final Screen screen,
+										  final String string, final int height) {
+		backBufferGraphics.setFont(fontRegularCn);
+		backBufferGraphics.drawString(string, screen.getWidth()*3 / 13
+				- fontRegularCnMetrics.stringWidth(string) / 2, height);
 	}
 	/**
 	 * Draws a right sided string on regular font.
@@ -1187,6 +1671,20 @@ public final class DrawManager {
 				- fontRegularMetrics.stringWidth(string) / 2, height);
 	}
 
+	public void drawRightsideRegularStringKr(final Screen screen,
+										   final String string, final int height) {
+		backBufferGraphics.setFont(fontRegularKr);
+		backBufferGraphics.drawString(string, screen.getWidth()*10 / 13
+				- fontRegularKrMetrics.stringWidth(string) / 2, height);
+	}
+
+	public void drawRightsideRegularStringCn(final Screen screen,
+											 final String string, final int height) {
+		backBufferGraphics.setFont(fontRegularCn);
+		backBufferGraphics.drawString(string, screen.getWidth()*10 / 13
+				- fontRegularCnMetrics.stringWidth(string) / 2, height);
+	}
+
 	/**
 	 * Draws a centered string on big font.
 	 *
@@ -1202,6 +1700,20 @@ public final class DrawManager {
 		backBufferGraphics.setFont(fontBig);
 		backBufferGraphics.drawString(string, screen.getWidth() / 2
 				- fontBigMetrics.stringWidth(string) / 2, height);
+	}
+
+	public void drawCenteredBigStringKr(final Screen screen, final String string,
+									  final int height) {
+		backBufferGraphics.setFont(fontBigKr);
+		backBufferGraphics.drawString(string, screen.getWidth() / 2
+				- fontBigKrMetrics.stringWidth(string) / 2, height);
+	}
+
+	public void drawCenteredBigStringCn(final Screen screen, final String string,
+									  final int height) {
+		backBufferGraphics.setFont(fontBigCn);
+		backBufferGraphics.drawString(string, screen.getWidth() / 2
+				- fontBigCnMetrics.stringWidth(string) / 2, height);
 	}
 
 
@@ -1225,47 +1737,145 @@ public final class DrawManager {
 		backBufferGraphics.fillRect(0, screen.getHeight() / 2 - rectHeight / 2,
 				rectWidth, rectHeight);
 		backBufferGraphics.setColor(Color.GREEN);
-		if (number >= 4)
-			if (!bonusLife) {
-				drawCenteredBigString(screen, "Level " + level,
-						screen.getHeight() / 2
-								+ fontBigMetrics.getHeight() / 3);
-			} else {
-				drawCenteredBigString(screen, "Level " + level
-								+ " - Bonus life!",
-						screen.getHeight() / 2
-								+ fontBigMetrics.getHeight() / 3);
-			}
-		else if (number != 0)
-			drawCenteredBigString(screen, Integer.toString(number),
-					screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3);
-		else
-			drawCenteredBigString(screen, "GO!", screen.getHeight() / 2
-					+ fontBigMetrics.getHeight() / 3);
+
+		if (Lang.lang == 2) {
+			if (number >= 4)
+				if (!bonusLife) {
+					drawCenteredBigString(screen, "水平 " + level,
+							screen.getHeight() / 2
+									+ fontBigCnMetrics.getHeight() / 3);
+				} else {
+					drawCenteredBigString(screen, "水平 " + level
+									+ " - 奖励生命!",
+							screen.getHeight() / 2
+									+ fontBigCnMetrics.getHeight() / 3);
+				}
+			else if (number != 0)
+				drawCenteredBigString(screen, Integer.toString(number),
+						screen.getHeight() / 2 + fontBigCnMetrics.getHeight() / 3);
+			else
+				drawCenteredBigString(screen, "走！", screen.getHeight() / 2
+						+ fontBigCnMetrics.getHeight() / 3);
+		}
+		else if (Lang.lang == 1) {
+			if (number >= 4)
+				if (!bonusLife) {
+					drawCenteredBigString(screen, "레벨 " + level,
+							screen.getHeight() / 2
+									+ fontBigKrMetrics.getHeight() / 3);
+				} else {
+					drawCenteredBigString(screen, "레벨 " + level
+									+ " - 보너스 라이프!",
+							screen.getHeight() / 2
+									+ fontBigKrMetrics.getHeight() / 3);
+				}
+			else if (number != 0)
+				drawCenteredBigString(screen, Integer.toString(number),
+						screen.getHeight() / 2 + fontBigKrMetrics.getHeight() / 3);
+			else
+				drawCenteredBigString(screen, "출발!", screen.getHeight() / 2
+						+ fontBigKrMetrics.getHeight() / 3);
+		}
+		else {
+			if (number >= 4)
+				if (!bonusLife) {
+					drawCenteredBigString(screen, "Level " + level,
+							screen.getHeight() / 2
+									+ fontBigMetrics.getHeight() / 3);
+				} else {
+					drawCenteredBigString(screen, "Level " + level
+									+ " - Bonus life!",
+							screen.getHeight() / 2
+									+ fontBigMetrics.getHeight() / 3);
+				}
+			else if (number != 0)
+				drawCenteredBigString(screen, Integer.toString(number),
+						screen.getHeight() / 2 + fontBigMetrics.getHeight() / 3);
+			else
+				drawCenteredBigString(screen, "GO!", screen.getHeight() / 2
+						+ fontBigMetrics.getHeight() / 3);
+		}
 	}
 
 	public void drawClear(final Screen screen, final int option, final int level) {
-		String titleString = "LEVEL  " + level + "  Clear";
+		String titleString;
 
-		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredBigString(screen, titleString, screen.getHeight() / 3 +  fontRegularMetrics.getHeight() * 2);
+		if (Lang.lang == 2) {
+			titleString = level + "级清除！";
 
-		String continueString = "Continue";
-		String exitString = "Exit";
-
-		if (option == 2)
 			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, continueString,
-				screen.getHeight() / 4 * 3);
+			drawCenteredBigStringCn(screen, titleString, screen.getHeight() / 3 +  fontRegularCnMetrics.getHeight() * 2);
+		}
+		else if (Lang.lang == 1) {
+			titleString = "레벨 " + level + "클리어!";
 
-		if (option == 1)
 			backBufferGraphics.setColor(Color.GREEN);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, exitString,
-				screen.getHeight() / 4 * 3 + fontRegularMetrics.getHeight() * 2);
+			drawCenteredBigStringKr(screen, titleString, screen.getHeight() / 3 +  fontRegularKrMetrics.getHeight() * 2);
+		}
+		else {
+			titleString = "LEVEL  " + level + "  Clear";
+
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredBigString(screen, titleString, screen.getHeight() / 3 +  fontRegularMetrics.getHeight() * 2);
+		}
+
+		String continueString;
+		String exitString;
+
+		if (Lang.lang == 2) {
+			continueString = "继续";
+			exitString = "出口";
+
+			if (option == 2)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringCn(screen, continueString,
+					screen.getHeight() / 4 * 3);
+
+			if (option == 1)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringCn(screen, exitString,
+					screen.getHeight() / 4 * 3 + fontRegularCnMetrics.getHeight() * 2);
+		}
+		else if (Lang.lang == 1) {
+			continueString = "계속";
+			exitString = "나가기";
+
+			if (option == 2)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringKr(screen, continueString,
+					screen.getHeight() / 4 * 3);
+
+			if (option == 1)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringKr(screen, exitString,
+					screen.getHeight() / 4 * 3 + fontRegularKrMetrics.getHeight() * 2);
+		}
+		else {
+			continueString = "Continue";
+			exitString = "Exit";
+
+			if (option == 2)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularString(screen, continueString,
+					screen.getHeight() / 4 * 3);
+
+			if (option == 1)
+				backBufferGraphics.setColor(Color.GREEN);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularString(screen, exitString,
+					screen.getHeight() / 4 * 3 + fontRegularMetrics.getHeight() * 2);
+		}
 	}
 
 	public void drawWindow(final Screen screen, int x, int y, int w){
@@ -1277,25 +1887,72 @@ public final class DrawManager {
 	}
 
 	public void drawPauseMenu(final Screen screen, final int option) {
-		String quit = "Quit";
-		String resume = "Resume";
+		String quit;
+		String resume;
 
-		if (option == 1)
+		if (Lang.lang == 2) {
+			quit = "辞去";
+			resume = "复职";
+
+			if (option == 1)
+				backBufferGraphics.setColor(Color.YELLOW);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringCn(screen, quit, screen.getHeight() / 2 - 10);
+
+			if (option == 0)
+				backBufferGraphics.setColor(Color.YELLOW);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringCn(screen, resume, screen.getHeight() / 2 + 20 );
+
+			//How to operate in the pause window
 			backBufferGraphics.setColor(Color.YELLOW);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, quit, screen.getHeight() / 2 - 10);
+			drawCenteredRegularStringCn(screen, "更改内容: Ctrl" + " / " + "选择: Spacebar",
+					screen.getHeight() / 2 - screen.getHeight() / 12 - 15);
+		}
+		else if (Lang.lang == 1) {
+			quit = "나가기";
+			resume = "돌아가기";
 
-		if (option == 0)
+			if (option == 1)
+				backBufferGraphics.setColor(Color.YELLOW);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringKr(screen, quit, screen.getHeight() / 2 - 10);
+
+			if (option == 0)
+				backBufferGraphics.setColor(Color.YELLOW);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularStringKr(screen, resume, screen.getHeight() / 2 + 20 );
+
+			//How to operate in the pause window
 			backBufferGraphics.setColor(Color.YELLOW);
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, resume, screen.getHeight() / 2 + 20 );
+			drawCenteredRegularStringKr(screen, "바꾸기: Ctrl" + " / " + "고르기: Spacebar",
+					screen.getHeight() / 2 - screen.getHeight() / 12 - 15);
+		}
+		else {
+			quit = "Quit";
+			resume = "Resume";
 
-		//How to operate in the pause window
-		backBufferGraphics.setColor(Color.YELLOW);
-		drawCenteredRegularString(screen, "Change: Ctrl" + " / " + "Select: Spacebar",
-				screen.getHeight() / 2 - screen.getHeight() / 12 - 15);
+			if (option == 1)
+				backBufferGraphics.setColor(Color.YELLOW);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularString(screen, quit, screen.getHeight() / 2 - 10);
+
+			if (option == 0)
+				backBufferGraphics.setColor(Color.YELLOW);
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawCenteredRegularString(screen, resume, screen.getHeight() / 2 + 20 );
+
+			//How to operate in the pause window
+			backBufferGraphics.setColor(Color.YELLOW);
+			drawCenteredRegularString(screen, "Change: Ctrl" + " / " + "Select: Spacebar",
+					screen.getHeight() / 2 - screen.getHeight() / 12 - 15);
+		}
 	}
 	public void drawManualMenu(final Screen screen) {
 
@@ -1330,6 +1987,20 @@ public final class DrawManager {
 				- fontRegularMetrics.stringWidth(string) / 2 , height);
 	}
 
+	public void drawOneFifthRegularStringCn(final Screen screen,
+										  final String string, final int height) {
+		backBufferGraphics.setFont(fontRegularCn);
+		backBufferGraphics.drawString(string, screen.getWidth() / 5
+				- fontRegularCnMetrics.stringWidth(string) / 2 , height);
+	}
+
+	public void drawOneFifthRegularStringKr(final Screen screen,
+										  final String string, final int height) {
+		backBufferGraphics.setFont(fontRegularKr);
+		backBufferGraphics.drawString(string, screen.getWidth() / 5
+				- fontRegularKrMetrics.stringWidth(string) / 2 , height);
+	}
+
 	public void drawSevenTenthRegularString(final Screen screen,
 											final String string, final int height) {
 		backBufferGraphics.setFont(fontRegular);
@@ -1337,74 +2008,222 @@ public final class DrawManager {
 				- fontRegularMetrics.stringWidth(string) / 2 , height);
 	}
 
+	public void drawSevenTenthRegularStringCn(final Screen screen,
+											final String string, final int height) {
+		backBufferGraphics.setFont(fontRegularCn);
+		backBufferGraphics.drawString(string, screen.getWidth() / 10 * 7
+				- fontRegularCnMetrics.stringWidth(string) / 2 , height);
+	}
+
+	public void drawSevenTenthRegularStringKr(final Screen screen,
+											final String string, final int height) {
+		backBufferGraphics.setFont(fontRegularKr);
+		backBufferGraphics.drawString(string, screen.getWidth() / 10 * 7
+				- fontRegularKrMetrics.stringWidth(string) / 2 , height);
+	}
+
 	public void drawStar(final Screen screen,
 						 final String string, final int height){
 		backBufferGraphics.setFont(fontRegular);
 		backBufferGraphics.drawString("*", screen.getWidth() / 5
 				- fontRegularMetrics.stringWidth(string) / 2 -16, height);
-
 	}
 
 	public void drawSetting(final Screen screen, final int option, final boolean selected){
-		String settingString = "Setting";
-		String instructionsString1 = "Move with UP, DOWN / Select with SPACE";
-		String instructionsString2 = "Press ESC to return";
+		String settingString;
+		String instructionsString1;
+		String instructionsString2;
 
-		String volumeString = "Volume";
-		String bgmString = "BGM";
-		String keysString1 = "1P Keys";
-		String keysString2 = "2P Keys";
+		String volumeString;
+		String bgmString;
+		String keysString1;
+		String keysString2;
+
+		if (Lang.lang == 2) {
+			settingString = "设置";
+			instructionsString1 = "使用上移、下移/使用Space选择";
+			instructionsString2 = "按ESC键返回";
+
+			volumeString = "音量";
+			bgmString = "BGM";
+			keysString1 = "1P 按钮";
+			keysString2 = "2P 按钮";
 
 
-		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredBigString(screen, settingString, screen.getHeight() / 8);
-
-		backBufferGraphics.setColor(Color.GRAY);
-		drawCenteredRegularString(screen, instructionsString1,
-				screen.getHeight() / 5 - fontRegularMetrics.getHeight() / 2);
-		drawCenteredRegularString(screen, instructionsString2,
-				screen.getHeight() / 5 + fontRegularMetrics.getHeight() / 2);
-
-
-		if (option == 0) {
 			backBufferGraphics.setColor(Color.GREEN);
-			if(selected) drawStar(screen, volumeString,
+			drawCenteredBigStringCn(screen, settingString, screen.getHeight() / 8);
+
+			backBufferGraphics.setColor(Color.GRAY);
+			drawCenteredRegularStringCn(screen, instructionsString1,
+					screen.getHeight() / 5 - fontRegularCnMetrics.getHeight() / 2);
+			drawCenteredRegularStringCn(screen, instructionsString2,
+					screen.getHeight() / 5 + fontRegularCnMetrics.getHeight() / 2);
+
+
+			if (option == 0) {
+				backBufferGraphics.setColor(Color.GREEN);
+				if(selected) drawStar(screen, volumeString,
+						screen.getHeight() / 4 + fontRegularCnMetrics.getHeight() * 2);
+			}
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawOneFifthRegularStringCn(screen, volumeString,
+					screen.getHeight() / 4 + fontRegularCnMetrics.getHeight() * 2);
+
+			if (option == 1) {
+				backBufferGraphics.setColor(Color.GREEN);
+				if(selected) drawStar(screen, bgmString,
+						screen.getHeight() / 4 + fontRegularCnMetrics.getHeight() * 4);
+			}
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawOneFifthRegularStringCn(screen, bgmString,
+					screen.getHeight() / 4 + fontRegularCnMetrics.getHeight() * 4);
+
+			if (option == 2) {
+				backBufferGraphics.setColor(Color.GREEN);
+				if(selected) drawStar(screen, keysString1,
+						screen.getHeight() / 4 + fontRegularCnMetrics.getHeight() * 6);;
+			}
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawOneFifthRegularStringCn(screen, keysString1,
+					screen.getHeight() / 4 + fontRegularCnMetrics.getHeight() * 6);
+
+			if (option == 3) {
+				backBufferGraphics.setColor(Color.GREEN);
+				if(selected) drawStar(screen, keysString2,
+						screen.getHeight() / 4 + fontRegularCnMetrics.getHeight() * 8);;
+			}
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawOneFifthRegularStringCn(screen, keysString2,
+					screen.getHeight() / 4 + fontRegularCnMetrics.getHeight() * 8);
+		}
+
+		else if (Lang.lang == 1) {
+			settingString = "설정";
+			instructionsString1 = "위아래 방향키로 움직이기 / 스페이스 바로 선택하기";
+			instructionsString2 = "Esc로 돌아가기";
+
+			volumeString = "음량";
+			bgmString = "BGM";
+			keysString1 = "1P 키";
+			keysString2 = "2P 키";
+
+
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredBigStringKr(screen, settingString, screen.getHeight() / 8);
+
+			backBufferGraphics.setColor(Color.GRAY);
+			drawCenteredRegularStringKr(screen, instructionsString1,
+					screen.getHeight() / 5 - fontRegularKrMetrics.getHeight() / 2);
+			drawCenteredRegularStringKr(screen, instructionsString2,
+					screen.getHeight() / 5 + fontRegularKrMetrics.getHeight() / 2);
+
+
+			if (option == 0) {
+				backBufferGraphics.setColor(Color.GREEN);
+				if(selected) drawStar(screen, volumeString,
+						screen.getHeight() / 4 + fontRegularKrMetrics.getHeight() * 2);
+			}
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawOneFifthRegularStringKr(screen, volumeString,
+					screen.getHeight() / 4 + fontRegularKrMetrics.getHeight() * 2);
+
+			if (option == 1) {
+				backBufferGraphics.setColor(Color.GREEN);
+				if(selected) drawStar(screen, bgmString,
+						screen.getHeight() / 4 + fontRegularKrMetrics.getHeight() * 4);
+			}
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawOneFifthRegularStringKr(screen, bgmString,
+					screen.getHeight() / 4 + fontRegularKrMetrics.getHeight() * 4);
+
+			if (option == 2) {
+				backBufferGraphics.setColor(Color.GREEN);
+				if(selected) drawStar(screen, keysString1,
+						screen.getHeight() / 4 + fontRegularKrMetrics.getHeight() * 6);;
+			}
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawOneFifthRegularStringKr(screen, keysString1,
+					screen.getHeight() / 4 + fontRegularKrMetrics.getHeight() * 6);
+
+			if (option == 3) {
+				backBufferGraphics.setColor(Color.GREEN);
+				if(selected) drawStar(screen, keysString2,
+						screen.getHeight() / 4 + fontRegularKrMetrics.getHeight() * 8);;
+			}
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawOneFifthRegularStringKr(screen, keysString2,
+					screen.getHeight() / 4 + fontRegularKrMetrics.getHeight() * 8);
+		}
+
+		else {
+			settingString = "Setting";
+			instructionsString1 = "Move with UP, DOWN / Select with SPACE";
+			instructionsString2 = "Press ESC to return";
+
+			volumeString = "Volume";
+			bgmString = "BGM";
+			keysString1 = "1P Keys";
+			keysString2 = "2P Keys";
+
+
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredBigString(screen, settingString, screen.getHeight() / 8);
+
+			backBufferGraphics.setColor(Color.GRAY);
+			drawCenteredRegularString(screen, instructionsString1,
+					screen.getHeight() / 5 - fontRegularMetrics.getHeight() / 2);
+			drawCenteredRegularString(screen, instructionsString2,
+					screen.getHeight() / 5 + fontRegularMetrics.getHeight() / 2);
+
+
+			if (option == 0) {
+				backBufferGraphics.setColor(Color.GREEN);
+				if(selected) drawStar(screen, volumeString,
+						screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 2);
+			}
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawOneFifthRegularString(screen, volumeString,
 					screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 2);
-		}
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawOneFifthRegularString(screen, volumeString,
-				screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 2);
 
-		if (option == 1) {
-			backBufferGraphics.setColor(Color.GREEN);
-			if(selected) drawStar(screen, bgmString,
+			if (option == 1) {
+				backBufferGraphics.setColor(Color.GREEN);
+				if(selected) drawStar(screen, bgmString,
+						screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 4);
+			}
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawOneFifthRegularString(screen, bgmString,
 					screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 4);
-		}
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawOneFifthRegularString(screen, bgmString,
-				screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 4);
 
-		if (option == 2) {
-			backBufferGraphics.setColor(Color.GREEN);
-			if(selected) drawStar(screen, keysString1,
-					screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 6);;
-		}
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawOneFifthRegularString(screen, keysString1,
-				screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 6);
+			if (option == 2) {
+				backBufferGraphics.setColor(Color.GREEN);
+				if(selected) drawStar(screen, keysString1,
+						screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 6);;
+			}
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawOneFifthRegularString(screen, keysString1,
+					screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 6);
 
-		if (option == 3) {
-			backBufferGraphics.setColor(Color.GREEN);
-			if(selected) drawStar(screen, keysString2,
-					screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 8);;
+			if (option == 3) {
+				backBufferGraphics.setColor(Color.GREEN);
+				if(selected) drawStar(screen, keysString2,
+						screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 8);;
+			}
+			else
+				backBufferGraphics.setColor(Color.WHITE);
+			drawOneFifthRegularString(screen, keysString2,
+					screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 8);
 		}
-		else
-			backBufferGraphics.setColor(Color.WHITE);
-		drawOneFifthRegularString(screen, keysString2,
-				screen.getHeight() / 4 + fontRegularMetrics.getHeight() * 8);
 
 		backBufferGraphics.setColor(Color.GREEN);
 		backBufferGraphics.drawLine(screen.getWidth()/5*2 -1,screen.getHeight() / 4,
@@ -1526,46 +2345,139 @@ public final class DrawManager {
 	}
 
 	public void drawSelect2PModeAndSkillModeScreen(Screen screen, int gameMode, boolean skillModeOn, boolean nextItem){
-		String selectString = "Select Mode";
-		String instructionsString =
-				"select with a+d / arrows, confirm with space";
+		String selectString;
+		String instructionsString;
 
-		backBufferGraphics.setColor(Color.GRAY);
-		drawCenteredRegularString(screen, instructionsString, screen.getHeight() / 5);
-		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredBigString(screen, selectString, screen.getHeight() / 8);
-		backBufferGraphics.drawString("Player", screen.getWidth() / 5
-				- fontRegularMetrics.stringWidth("Player") / 2 , screen.getHeight() / 8 * 3);
-		backBufferGraphics.drawString("Skill Mode", screen.getWidth() / 5
-				- fontRegularMetrics.stringWidth("Player") / 2 , screen.getHeight() / 8 * 5);
+		if (Lang.lang == 2) {
+			selectString = "选择模式";
+			instructionsString =
+					"用a+d/箭头选择,用空格确认";
 
-		if(gameMode == 1) backBufferGraphics.setColor(Color.GREEN);
-		else backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("1P", screen.getWidth() / 10 * 6
-				- fontRegularMetrics.stringWidth("1P") / 2 , screen.getHeight()
-				/ 8 * 3 + fontRegularMetrics.getHeight() * 2);
-
-		if(gameMode == 2) backBufferGraphics.setColor(Color.GREEN);
-		else backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("2P", screen.getWidth() / 10 * 8
-				- fontRegularMetrics.stringWidth("2P") / 2 , screen.getHeight()
-				/ 8 * 3 + fontRegularMetrics.getHeight() * 2);
-
-		backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("ON", screen.getWidth() / 10 * 6
-				- fontRegularMetrics.stringWidth("ON") / 2 , screen.getHeight()
-				/ 8 * 5 + fontRegularMetrics.getHeight() * 2);
-		backBufferGraphics.drawString("OFF", screen.getWidth() / 10 * 8
-				- fontRegularMetrics.stringWidth("OFF") / 2 , screen.getHeight()
-				/ 8 * 5 + fontRegularMetrics.getHeight() * 2);
-		if(nextItem){
+			backBufferGraphics.setColor(Color.GRAY);
+			drawCenteredRegularStringCn(screen, instructionsString, screen.getHeight() / 5);
 			backBufferGraphics.setColor(Color.GREEN);
-			if(skillModeOn) backBufferGraphics.drawString("ON", screen.getWidth() / 10 * 6
-						- fontRegularMetrics.stringWidth("ON") / 2 , screen.getHeight()
-						/ 8 * 5 + fontRegularMetrics.getHeight() * 2);
-			else backBufferGraphics.drawString("OFF", screen.getWidth() / 10 * 8
+			drawCenteredBigStringCn(screen, selectString, screen.getHeight() / 8);
+			backBufferGraphics.drawString("球员", screen.getWidth() / 5
+					- fontRegularCnMetrics.stringWidth("球员") / 2 , screen.getHeight() / 8 * 3);
+			backBufferGraphics.drawString("技能模式", screen.getWidth() / 5
+					- fontRegularCnMetrics.stringWidth("球员") / 2 , screen.getHeight() / 8 * 5);
+
+			if(gameMode == 1) backBufferGraphics.setColor(Color.GREEN);
+			else backBufferGraphics.setColor(Color.WHITE);
+			backBufferGraphics.drawString("1P", screen.getWidth() / 10 * 6
+					- fontRegularCnMetrics.stringWidth("1P") / 2 , screen.getHeight()
+					/ 8 * 3 + fontRegularCnMetrics.getHeight() * 2);
+
+			if(gameMode == 2) backBufferGraphics.setColor(Color.GREEN);
+			else backBufferGraphics.setColor(Color.WHITE);
+			backBufferGraphics.drawString("2P", screen.getWidth() / 10 * 8
+					- fontRegularCnMetrics.stringWidth("2P") / 2 , screen.getHeight()
+					/ 8 * 3 + fontRegularCnMetrics.getHeight() * 2);
+
+			backBufferGraphics.setColor(Color.WHITE);
+			backBufferGraphics.drawString("ON", screen.getWidth() / 10 * 6
+					- fontRegularCnMetrics.stringWidth("ON") / 2 , screen.getHeight()
+					/ 8 * 5 + fontRegularCnMetrics.getHeight() * 2);
+			backBufferGraphics.drawString("OFF", screen.getWidth() / 10 * 8
+					- fontRegularCnMetrics.stringWidth("OFF") / 2 , screen.getHeight()
+					/ 8 * 5 + fontRegularCnMetrics.getHeight() * 2);
+			if(nextItem){
+				backBufferGraphics.setColor(Color.GREEN);
+				if(skillModeOn) backBufferGraphics.drawString("ON", screen.getWidth() / 10 * 6
+						- fontRegularCnMetrics.stringWidth("ON") / 2 , screen.getHeight()
+						/ 8 * 5 + fontRegularCnMetrics.getHeight() * 2);
+				else backBufferGraphics.drawString("OFF", screen.getWidth() / 10 * 8
+						- fontRegularCnMetrics.stringWidth("OFF") / 2 , screen.getHeight()
+						/ 8 * 5 + fontRegularCnMetrics.getHeight() * 2);
+			}
+		}
+
+		else if (Lang.lang == 1) {
+			selectString = "모드 선택";
+			instructionsString =
+					"a+d / 방향키로 선택하고, 스페이스 바로 정하세요";
+
+			backBufferGraphics.setColor(Color.GRAY);
+			drawCenteredRegularStringKr(screen, instructionsString, screen.getHeight() / 5);
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredBigStringKr(screen, selectString, screen.getHeight() / 8);
+			backBufferGraphics.drawString("플레이어", screen.getWidth() / 5
+					- fontRegularKrMetrics.stringWidth("플레이어") / 2 , screen.getHeight() / 8 * 3);
+			backBufferGraphics.drawString("스킬 모드", screen.getWidth() / 5
+					- fontRegularKrMetrics.stringWidth("플레이어") / 2 , screen.getHeight() / 8 * 5);
+
+			if(gameMode == 1) backBufferGraphics.setColor(Color.GREEN);
+			else backBufferGraphics.setColor(Color.WHITE);
+			backBufferGraphics.drawString("1P", screen.getWidth() / 10 * 6
+					- fontRegularKrMetrics.stringWidth("1P") / 2 , screen.getHeight()
+					/ 8 * 3 + fontRegularKrMetrics.getHeight() * 2);
+
+			if(gameMode == 2) backBufferGraphics.setColor(Color.GREEN);
+			else backBufferGraphics.setColor(Color.WHITE);
+			backBufferGraphics.drawString("2P", screen.getWidth() / 10 * 8
+					- fontRegularKrMetrics.stringWidth("2P") / 2 , screen.getHeight()
+					/ 8 * 3 + fontRegularKrMetrics.getHeight() * 2);
+
+			backBufferGraphics.setColor(Color.WHITE);
+			backBufferGraphics.drawString("ON", screen.getWidth() / 10 * 6
+					- fontRegularKrMetrics.stringWidth("ON") / 2 , screen.getHeight()
+					/ 8 * 5 + fontRegularKrMetrics.getHeight() * 2);
+			backBufferGraphics.drawString("OFF", screen.getWidth() / 10 * 8
+					- fontRegularKrMetrics.stringWidth("OFF") / 2 , screen.getHeight()
+					/ 8 * 5 + fontRegularKrMetrics.getHeight() * 2);
+			if(nextItem){
+				backBufferGraphics.setColor(Color.GREEN);
+				if(skillModeOn) backBufferGraphics.drawString("ON", screen.getWidth() / 10 * 6
+						- fontRegularKrMetrics.stringWidth("ON") / 2 , screen.getHeight()
+						/ 8 * 5 + fontRegularKrMetrics.getHeight() * 2);
+				else backBufferGraphics.drawString("OFF", screen.getWidth() / 10 * 8
+						- fontRegularKrMetrics.stringWidth("OFF") / 2 , screen.getHeight()
+						/ 8 * 5 + fontRegularKrMetrics.getHeight() * 2);
+			}
+		}
+
+		else {
+			selectString = "Select Mode";
+			instructionsString =
+					"select with a+d / arrows, confirm with space";
+
+			backBufferGraphics.setColor(Color.GRAY);
+			drawCenteredRegularString(screen, instructionsString, screen.getHeight() / 5);
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredBigString(screen, selectString, screen.getHeight() / 8);
+			backBufferGraphics.drawString("Player", screen.getWidth() / 5
+					- fontRegularMetrics.stringWidth("Player") / 2 , screen.getHeight() / 8 * 3);
+			backBufferGraphics.drawString("Skill Mode", screen.getWidth() / 5
+					- fontRegularMetrics.stringWidth("Player") / 2 , screen.getHeight() / 8 * 5);
+
+			if(gameMode == 1) backBufferGraphics.setColor(Color.GREEN);
+			else backBufferGraphics.setColor(Color.WHITE);
+			backBufferGraphics.drawString("1P", screen.getWidth() / 10 * 6
+					- fontRegularMetrics.stringWidth("1P") / 2 , screen.getHeight()
+					/ 8 * 3 + fontRegularMetrics.getHeight() * 2);
+
+			if(gameMode == 2) backBufferGraphics.setColor(Color.GREEN);
+			else backBufferGraphics.setColor(Color.WHITE);
+			backBufferGraphics.drawString("2P", screen.getWidth() / 10 * 8
+					- fontRegularMetrics.stringWidth("2P") / 2 , screen.getHeight()
+					/ 8 * 3 + fontRegularMetrics.getHeight() * 2);
+
+			backBufferGraphics.setColor(Color.WHITE);
+			backBufferGraphics.drawString("ON", screen.getWidth() / 10 * 6
+					- fontRegularMetrics.stringWidth("ON") / 2 , screen.getHeight()
+					/ 8 * 5 + fontRegularMetrics.getHeight() * 2);
+			backBufferGraphics.drawString("OFF", screen.getWidth() / 10 * 8
 					- fontRegularMetrics.stringWidth("OFF") / 2 , screen.getHeight()
 					/ 8 * 5 + fontRegularMetrics.getHeight() * 2);
+			if(nextItem){
+				backBufferGraphics.setColor(Color.GREEN);
+				if(skillModeOn) backBufferGraphics.drawString("ON", screen.getWidth() / 10 * 6
+						- fontRegularMetrics.stringWidth("ON") / 2 , screen.getHeight()
+						/ 8 * 5 + fontRegularMetrics.getHeight() * 2);
+				else backBufferGraphics.drawString("OFF", screen.getWidth() / 10 * 8
+						- fontRegularMetrics.stringWidth("OFF") / 2 , screen.getHeight()
+						/ 8 * 5 + fontRegularMetrics.getHeight() * 2);
+			}
 		}
 	}
 

@@ -223,6 +223,44 @@ public final class FileManager {
         return font;
     }
 
+    public Font loadKrFont(final float size) throws IOException,
+            FontFormatException {
+        InputStream inputStream = null;
+        Font font;
+
+        try {
+            // Font loading.
+            inputStream = FileManager.class.getClassLoader()
+                    .getResourceAsStream("LanaPixel.ttf");
+            font = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(
+                    size);
+        } finally {
+            if (inputStream != null)
+                inputStream.close();
+        }
+
+        return font;
+    }
+
+    public Font loadCnFont(final float size) throws IOException,
+            FontFormatException {
+        InputStream inputStream = null;
+        Font font;
+
+        try {
+            // Font loading.
+            inputStream = FileManager.class.getClassLoader()
+                    .getResourceAsStream("LanaPixel.ttf");
+            font = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(
+                    size);
+        } finally {
+            if (inputStream != null)
+                inputStream.close();
+        }
+
+        return font;
+    }
+
     /**
      * Returns the application default scores if there is no user high scores
      * file.
