@@ -36,25 +36,28 @@ public final class Core {
 
 	/** Difficulty settings for level 1. */
 	private static final GameSettings SETTINGS_LEVEL_1 =
-			new GameSettings(5, 4, 60, 2000, 5.5);
+			new GameSettings(5, 4, 60, 2000, 5.5, "1");
 	/** Difficulty settings for level 2. */
 	private static final GameSettings SETTINGS_LEVEL_2 =
-			new GameSettings(5, 5, 50, 2500, 5.5);
+			new GameSettings(5, 5, 50, 2500, 5.5, "2");
 	/** Difficulty settings for level 3. */
 	private static final GameSettings SETTINGS_LEVEL_3 =
-			new GameSettings(6, 5, 40, 1500, 5.5);
+			new GameSettings(6, 5, 40, 1500, 5.5, "3");
 	/** Difficulty settings for level 4. */
 	private static final GameSettings SETTINGS_LEVEL_4 =
-			new GameSettings(6, 6, 30, 1500, 5);
+			new GameSettings(6, 6, 30, 1500, 5, "4");
 	/** Difficulty settings for level 5. */
 	private static final GameSettings SETTINGS_LEVEL_5 =
-			new GameSettings(7, 6, 20, 1000,5);
+			new GameSettings(7, 6, 20, 1000,5, "5");
 	/** Difficulty settings for level 6. */
 	private static final GameSettings SETTINGS_LEVEL_6 =
-			new GameSettings(7, 7, 10, 1000,4.8);
+			new GameSettings(7, 7, 10, 1000,4.8, "6");
 	/** Difficulty settings for level 7. */
 	private static final GameSettings SETTINGS_LEVEL_7 =
-			new GameSettings(8, 7, 2, 500,4.8);
+			new GameSettings(8, 7, 2, 500,4.8, "7");
+	/** Difficulty settings for level 8.  random level */
+	private static final GameSettings SETTINGS_LEVEL_8 =
+			new GameSettings((int)(Math.random() * 5) + 1, (int)(Math.random() * 5) + 1, (int)(Math.random() * 40) + 5, (int)(Math.random() * 2000) + 500,(int)(Math.random() * 2) + 4, "random");
 
 	/** Frame to draw the screen on. */
 	private static Frame frame;
@@ -137,6 +140,7 @@ public final class Core {
 		gameSettings.add(SETTINGS_LEVEL_5);
 		gameSettings.add(SETTINGS_LEVEL_6);
 		gameSettings.add(SETTINGS_LEVEL_7);
+		gameSettings.add(SETTINGS_LEVEL_8);
 
 		AchievementManager.getInstance().markAchievementAsAchieved(Achievement.ADVENTURE_START);
 
@@ -316,11 +320,11 @@ public final class Core {
 				break;
 			case 9:
 				//Select level.
-				currentScreen = new LevelSelectionScreen(width, height, FPS, gameSettings.size());
+				currentScreen = new LevelSelectionScreen(width, height, FPS, gameSettings);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " Level Selection screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
-				LOGGER.info("Selected level " + LevelSelectionScreen.levelCode + ".");
+				LOGGER.info("Selected level " + gameSettings.get(LevelSelectionScreen.levelCode).getLevelName() + ".");
 				LOGGER.info("Closing LevelSelection screen.");
 				break;
 			default:
