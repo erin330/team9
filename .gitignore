@@ -2,6 +2,8 @@
 ## Eclipse
 #################
 
+lib/*
+
 *.pydevproject
 .project
 .metadata
@@ -181,3 +183,6 @@ outg
 out/
 scores_1p
 scores_2p
+
+#Maven
+target/

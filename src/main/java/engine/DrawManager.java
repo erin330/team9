@@ -199,9 +199,22 @@ public final class DrawManager {
 
 		fontRegularMetrics = backBufferGraphics.getFontMetrics(fontRegular);
 		fontBigMetrics = backBufferGraphics.getFontMetrics(fontBig);
+	}
 
-		// drawBorders(screen);
-		// drawGrid(screen);
+	/**
+	 * Temporary testing method. This needs refactoring for production.
+	 *
+	 */
+	public void initDrawing(final Screen screen, BufferedImage backBuffer) {
+		graphics = frame.getGraphics();
+		backBufferGraphics = backBuffer.getGraphics();
+
+		backBufferGraphics.setColor(Color.BLACK);
+		backBufferGraphics
+				.fillRect(0, 0, screen.getWidth(), screen.getHeight() + frame.getBottomHudHeight());
+
+		fontRegularMetrics = backBufferGraphics.getFontMetrics(fontRegular);
+		fontBigMetrics = backBufferGraphics.getFontMetrics(fontBig);
 	}
 
 	/**
