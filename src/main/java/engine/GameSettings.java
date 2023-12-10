@@ -18,6 +18,8 @@ public class GameSettings {
 	private int shootingFrecuency;
 	/** Speed of item dropping. */
 	private double itemSpeed;
+	/** Name of level. */
+	private String levelName;
 	/**
 	 * Constructor.
 	 * 
@@ -30,13 +32,13 @@ public class GameSettings {
 	 * @param shootingFrecuency
 	 *            Frecuency of enemy shootings, +/- 30%.
 	 */
-	public GameSettings(final int formationWidth, final int formationHeight,
-			final int baseSpeed, final int shootingFrecuency, final double itemSpeed) {
+	public GameSettings(final int formationWidth, final int formationHeight, final int baseSpeed, final int shootingFrecuency, final double itemSpeed, final String levelName) {
 		this.formationWidth = formationWidth;
 		this.formationHeight = formationHeight;
 		this.baseSpeed = baseSpeed;
 		this.shootingFrecuency = shootingFrecuency;
 		this.itemSpeed = itemSpeed;
+		this.levelName = levelName;
 	}
 
 	/**
@@ -65,6 +67,10 @@ public class GameSettings {
 	 */
 	public final int getShootingFrecuency() {
 		return shootingFrecuency;
+	}
+
+	public final String getLevelName(){
+		return levelName;
 	}
 
 }
