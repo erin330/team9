@@ -338,11 +338,8 @@ public class GameScreen extends Screen {
                     boolean moveRight = inputManager.isKeyDown(Core.getKeySettingCode(1));
                     boolean moveLeft = inputManager.isKeyDown(Core.getKeySettingCode(0));
 
-                    boolean isRightBorder = this.ship.getPositionX()
-                            + this.ship.getWidth() + this.ship.getSpeed() > this.width - 1;
-                    boolean isLeftBorder = this.ship.getPositionX()
-                            - this.ship.getSpeed() < 1;
-					//hyeontae kim
+                    boolean isRightBorder = this.ship.getPositionX() + this.ship.getWidth() + this.ship.getSpeed() > this.width - 1;
+                    boolean isLeftBorder = this.ship.getPositionX() - this.ship.getSpeed() < 1;
 					if (this.lives == 1) {
 						SoundManager.playSound("SFX/S_Warning", "Warning", false, false);
 					}
@@ -445,7 +442,6 @@ public class GameScreen extends Screen {
                     boolean isLeftBorder2p = this.ship2.getPositionX()
                             - this.ship2.getSpeed() < 1;
 
-					//hyeontae kim
 					if (this.lives == 1 || this.lives2 == 1) {
 						SoundManager.playSound("SFX/S_Warning", "Warning", false, false);
 					}
@@ -775,7 +771,6 @@ public class GameScreen extends Screen {
 			}
 		}
 
-		//hyeontae kim
 		if (this.lives == 1 || this.lives2 == 1) {
 			drawManager.drawWarn(this);
 		}
