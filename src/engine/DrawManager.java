@@ -327,7 +327,6 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.WHITE);
 		backBufferGraphics.drawString(Integer.toString(lives), 20, 25);
 		Ship dummyShip = new Ship(0, 0, Color.GREEN, SpriteType.Life, false);
-		//hyeontae kim
 		Ship dummyShipYellow = new Ship(0, 0, Color.YELLOW, SpriteType.Life, false);
 		for (int i = 0; i < lives; i++)
 			if (lives > 1)
@@ -350,7 +349,6 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.WHITE);
 		backBufferGraphics.drawString(Integer.toString(lives2), 160, 25);
 		Ship dummyShip = new Ship(0, 0, Color.RED, SpriteType.Life, false);
-		//hyeontae kim
 		Ship dummyShipYellow = new Ship(0, 0, Color.YELLOW, SpriteType.Life, false);
 		for (int i = 0; i < lives2; i++)
 			if (lives2 > 1)
@@ -450,7 +448,6 @@ public final class DrawManager {
 		backBufferGraphics.drawString("BUL: " + Integer.toString(10-bullet_count2) + "/" + Integer.toString(magazine2), 224, screen.getHeight() + 25);
 	}
 
-	//hyeontae kim
 	public void drawWarn(final Screen screen) {
 		for (int i=0; i<6; i++) {
 			backBufferGraphics.setColor(Color.RED);
